@@ -23,7 +23,7 @@ Gets the Reservation details.
 
 - For each of these functionalities it also needs to have an endpoint on the ReservationController.
 
-- We use Autommapper on the solution, you can map your DTO to Entitites using it.
+- We use Automapper on the solution, you can map your DTO to Entitites using it.
 
 - EntityFrameworkCore is used on the API, there's a configuration file for it already, create the migration for the solution.
 
