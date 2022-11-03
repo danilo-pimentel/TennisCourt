@@ -5,16 +5,16 @@ The API is created but it's missing the business requirements.
 
 # Business Requirements
 
-- ProcessReservation:
+- Process Reservation:
 Creation of the actual Reservation with the attributes from Reservation Model.
   
-- CancelReservation:
+- Cancel Reservation:
 Cancellation of the Reservation, using the RefundValue.
   
-- RescheduleReservation:
+- Reschedule Reservation:
 Reschedule the reservation to a new date when there's no schedule set.
   
-- GetReservation:
+- Get Reservation:
 Gets the Reservation details.
 
 # Technical requirements
