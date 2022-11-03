@@ -1,0 +1,231 @@
+###############################################  INCLUDE EXTERNAL FILES     ###################################################
+
+include:
+    - remote: 'https://gitlab.dell.com/api/v4/projects/108857/repository/files/base-pipeline-blueprint.yml/raw?ref=main&private_token=$TOKEN_BASE_PIPELINE&type=.yml'
+
+variables:
+    BUILD_CSPROJ: "src/Ns.EntryPoint.Api/Ns.EntryPoint.Api.csproj"
+    UNIT_TEST_PROJECT: './test/unit/Ns.EntryPoint.Unit.Tests/Ns.EntryPoint.Unit.Tests.csproj'
+    INTEGRATION_TEST_PROJECT: 'test/integration/Ns.EntryPoint.Integration.Tests/Ns.EntryPoint.Integration.Tests.csproj'
+    SERVICE_TEMP_APP_NAME: NsEntryPoint-v1-TEMP
+    SERVICE_APP_NAME: NsEntryPoint-v1
+    SERVICE_BROWN_APP_NAME: NsEntryPoint-v1-BROWN
+
+    SERVICE_APP_NAME_DIT: NsEntryPointDIT-v1
+    SERVICE_APP_NAME_DIT2: NsEntryPointDIT2-v1
+    SERVICE_APP_NAME_SIT: NsEntryPointSIT-v1
+    SERVICE_APP_NAME_UAT: NsEntryPointUAT-v1
+    SERVICE_APP_NAME_PERF: NsEntryPointPERF-v1
+
+
+    BLACKDUCK_PROJECT_NAME: Ns.EntryPoint.Service_NotificationServices
+    BLACKDUCK_PROJECT_VERSION: 1
+######################################################      BUILD        ###################################################
+
+build:
+    extends: 
+        - .build
+        - .tags-linux
+    variables: 
+        BUILD_CONFIGURATION: "Debug"
+
+build_release: 
+    extends: 
+        - .build
+        - .tags-linux
+    variables: 
+        TARGET: ./$TARGET_release
+        BUILD_CONFIGURATION: "Release"
+    rules:
+      - if: $CI_COMMIT_TAG
+      - if: '$CI_COMMIT_BRANCH =~ /^([Mm]aster|[Mm]ain|[Rr]elease|[Ss]tage).*$/'
+
+
+######################################################    UNIT TEST       ###################################################
+
+unit-test:
+    extends: 
+        - .unit-test
+        - .tags-linux
+    needs: 
+        - build
+
+
+######################################################    CODE QUALITY       ###################################################
+
+code-quality:
+    extends: 
+        - .code-quality
+        - .tags-linux
+    variables:
+        UNIT_TEST_PROJ: 'test/unit/Ns.EntryPoint.Unit.Tests/Ns.EntryPoint.Unit.Tests.csproj'
+    allow_failure: false
+    needs:
+        - build
+
+security_scan:
+    extends:
+        - .checkmarx
+        - .tags-linux
+    needs: 
+        - build
+
+blackduck-scan:
+    extends: 
+        - .blackduck-scan
+        - .tags-linux
+    needs:
+        - build
+
+xray-scan-ns:
+    extends: 
+        - .xray-scan-ns
+        - .tags-linux
+    needs: 
+        - build
+
+
+######################################################    INTEGRATION TEST       ###################################################
+
+integration-test:
+    extends: 
+        - .unit-test
+        - .tags-linux
+    allow_failure: false
+    retry:
+        max: 2
+    variables:
+        UNIT_TEST_PROJ: $INTEGRATION_TEST_PROJECT
+
+######################################################    DEPLOY NON-PROD   ###################################################
+
+deploy-pcf-dit2:
+    extends: 
+        - .deploy-pcf-dit2
+    variables: 
+        PCF_MF_FILE: 'src/Ns.EntryPoint.Api/manifest.DIT2.yml'
+
+deploy-pcf-perf:
+    extends: 
+        - .deploy-pcf-perf
+    variables: 
+        PCF_MF_FILE: 'src/Ns.EntryPoint.Api/manifest.PERF.yml'
+
+deploy-pcf-dit:
+    extends: 
+        - .deploy-pcf-dit
+    variables: 
+        PCF_MF_FILE: 'src/Ns.EntryPoint.Api/manifest.DIT.yml'
+
+deploy-pcf-sit:
+    extends: 
+        - .deploy-pcf-sit
+    variables: 
+        PCF_MF_FILE: 'src/Ns.EntryPoint.Api/manifest.SIT.yml'
+    
+deploy-pcf-uat:
+    extends: 
+        - .deploy-pcf-uat
+    variables: 
+        PCF_MF_FILE: 'src/Ns.EntryPoint.Api/manifest.UAT.yml'
+
+
+########################################################     SMOKE TEST NON PROD    #####################################################
+
+smoke-tests-dit:
+    extends: 
+        - .smoke-tests-dit
+    variables:
+        UNIT_TEST_PROJECT: "Ns.EntryPoint.Smoke.Tests"
+
+smoke-tests-sit:
+    extends: 
+        - .smoke-tests-sit
+    variables:
+        UNIT_TEST_PROJECT: "Ns.EntryPoint.Smoke.Tests"
+
+smoke-tests-uat:
+    extends: 
+        - .smoke-tests-uat
+    variables:
+        UNIT_TEST_PROJECT: "Ns.EntryPoint.Smoke.Tests"
+
+####################################################SMOKE TESTS PROD ############################################################
+
+smoke-tests-pc1:
+    extends: 
+        - .smoke-test-prod
+        - .tags-linux
+    before_script: 
+        - export ASPNETCORE_ENVIRONMENT=PROD-PC1
+    variables:
+        UNIT_TEST_PATH: "smoke"
+        UNIT_TEST_PROJECT: "Ns.EntryPoint.Smoke.Tests"
+        ENVIRONMENT: "prod-pc1"
+    needs:
+        - deploy-prod-pri
+
+smoke-tests-s3b:
+    extends: 
+        - .smoke-test-prod
+        - .tags-linux
+    before_script: 
+        - export ASPNETCORE_ENVIRONMENT=PROD-S3B
+    variables:
+        UNIT_TEST_PATH: "smoke"
+        UNIT_TEST_PROJECT: "Ns.EntryPoint.Smoke.Tests"
+        ENVIRONMENT: "prod-s3b"
+    needs:
+        - deploy-prod-sec
+
+artifactory-upload:
+  extends: .artifactory-upload-ns
+
+retrieve-artifact:
+  extends: .retrieve-artifact-ns
+
+deploy-prod-pri:
+    extends:
+        - .deploy-prod-primary
+        - .tags-linux
+    variables:
+        MF_FILE: 'src/Ns.EntryPoint.Api/manifest.PROD-PC1.yml'
+
+switch-route-pri:
+    extends:
+        - .switch-route-primary
+        - .tags-linux
+
+rollback-pri:
+    extends:
+        - .rollback-primary
+        - .tags-linux
+
+deploy-prod-sec:
+    extends:
+        - .deploy-prod-secondary
+        - .tags-linux
+    variables:
+        MF_FILE: 'src/Ns.EntryPoint.Api/manifest.PROD-S3B.yml'
+
+switch-route-sec:
+    extends:
+        - .switch-route-secondary
+        - .tags-linux
+            
+rollback-sec:
+    extends:
+        - .rollback-secondary
+        - .tags-linux
+
+create-rfc-ns:
+    extends: 
+        - .create-rfc-ns
+
+update-rfc-deploy-ns:
+    extends:
+        - .update-rfc-deploy-ns
+
+update-rfc-validate-ns:
+    extends:
+        - .update-rfc-validate-ns

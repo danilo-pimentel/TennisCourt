@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>TennisCourt.Infra.CrossCutting.IoC.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="TennisCourt.Infra.CrossCutting.IoC.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TennisCourt.Application\TennisCourt.Application.csproj" />
+    <ProjectReference Include="..\TennisCourt.Infra.CrossCutting.Commons\TennisCourt.Infra.CrossCutting.Commons.csproj" />
+    <ProjectReference Include="..\TennisCourt.Infra.Data\TennisCourt.Infra.Data.csproj" />
+  </ItemGroup>
+
+</Project>
