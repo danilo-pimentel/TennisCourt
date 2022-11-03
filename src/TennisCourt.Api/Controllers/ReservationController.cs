@@ -1,21 +1,16 @@
-﻿using MassTransit;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.Mvc;
 using TennisCourt.Application.Interface;
-using TennisCourt.Infra.CrossCutting.Commons.Providers;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace TennisCourt.Api.Controllers
 {
     [Route("reservation")]
     public class ReservationController : ControllerBase
     {
-        private readonly IReservationAppService _smsRequestService;
+        private readonly IReservationAppService _reservationService;
 
-        public ReservationController(IReservationAppService smsRequestService)
+        public ReservationController(IReservationAppService reservationService)
         {
-            _smsRequestService = smsRequestService;
+            _reservationService = reservationService;
         }
 
 

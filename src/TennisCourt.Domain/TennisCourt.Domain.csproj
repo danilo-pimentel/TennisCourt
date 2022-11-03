@@ -12,8 +12,4 @@
     <None Remove="TennisCourt.Domain.xml" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="11.1.1" />
-  </ItemGroup>
-
 </Project>

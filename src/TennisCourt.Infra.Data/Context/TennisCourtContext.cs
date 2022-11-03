@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using MongoDB.Driver;
 using TennisCourt.Infra.CrossCutting.Commons.Providers;
 
 namespace TennisCourt.Infra.Data.Context

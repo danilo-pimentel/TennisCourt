@@ -1,7 +1,4 @@
 ﻿using AutoMapper;
-using MassTransit;
-using Ns.Contracts.Commons;
-using Ns.Contracts.EntryPoint;
 using TennisCourt.Application.Interface;
 using TennisCourt.Domain.Interfaces.Repositories;
 using TennisCourt.Domain.Models;
