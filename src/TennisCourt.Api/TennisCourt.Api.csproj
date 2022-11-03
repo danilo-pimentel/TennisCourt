@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <None Remove="Ns.EntryPoint.Api.xml" />
+    <None Remove="TennisCourt.Api.xml" />
   </ItemGroup>
 
   <ItemGroup>

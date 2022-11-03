@@ -3,6 +3,8 @@ using Steeltoe.Extensions.Configuration.CloudFoundry;
 using TennisCourt.Api.Configurations;
 using TennisCourt.Api.Swagger;
 using TennisCourt.Infra.CrossCutting.IoC;
+using TennisCourt.Infra.Data.Context;
+using TennisCourt.Infra.Data.Context.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,7 +42,7 @@ builder.Services.RegisterServices();
 
 builder.Services.AddAutoMapperSetup();
 
-
+builder.Services.AddDbContext<TennisCourtContext>();
 
 // Swagger
 builder.Services.AddSwaggerSetup(builder.Configuration);
@@ -64,6 +66,7 @@ if (builder.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();
 //Security
 if (!builder.Environment.IsDevelopment())
 {
+    app.ApplyMigrations();
     app.UseHsts();
     app.Use(async (context, next) =>
     {
@@ -79,8 +82,6 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint(
         url: "/swagger/v1/swagger.json",
         name: "Tenis Court API v1");
-
-    options.OAuthUseBasicAuthenticationWithAccessCodeGrant();
 });
 
 //app.UseHttpsRedirection();
@@ -89,8 +90,8 @@ app.UseRouting();
 app.UseStaticFiles();
 
 
-app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthentication();
+//app.UseAuthorization();
 
 
 app.UseEndpoints(endpoints =>

@@ -22,7 +22,7 @@ namespace TennisCourt.Api.Swagger
 
                 c.SwaggerDoc(name: "v1", info: openApiInfo);
                 c.IncludeXmlComments(AppContext.BaseDirectory + $"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
-                c.IncludeXmlComments(AppContext.BaseDirectory + "TenisCourts.Application.xml");
+                c.IncludeXmlComments(AppContext.BaseDirectory + "TennisCourt.Application.xml");
 
 
             });
