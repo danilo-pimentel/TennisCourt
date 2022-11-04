@@ -3,6 +3,11 @@
 This is a backend API to manage reservations for a Tennis Court. 
 The API is created but it's missing the business requirements.
 
+# Instructions
+
+- Create a fork of this project using your github account.
+- Be prepared to show your solution in the interview.
+
 # Business Requirements
 
 - Process Reservation:
