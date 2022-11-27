@@ -10,12 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddCloudFoundry();
 
-
 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != Environments.Development)
 {
     builder.UseCloudHosting();
 }
-
 
 builder.Services.AddControllersWithViews((options) =>
 {
@@ -33,6 +31,9 @@ builder.Services.AddOptions();
 
 // Read from VCAP_SERVICES env variable and and generate keys to IConfiguration
 builder.Services.ConfigureCloudFoundryOptions(builder.Configuration);
+
+// Read configuration and prepare singleton user settings class
+builder.Services.ConfigureUserProvidedSettings(builder.Configuration);
 
 // ASP.NET HttpContext dependency
 builder.Services.AddHttpContextAccessor();
@@ -60,6 +61,7 @@ builder.Services.AddEndpointsApiExplorer();
 var app = builder.Build();
 
 if (builder.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();
+
 //TODO: verify migrations for mongoDb
 //if (!builder.Environment.IsProduction()) app.ApplyMigrations();
 
@@ -89,10 +91,8 @@ app.UseSwaggerUI(options =>
 app.UseRouting();
 app.UseStaticFiles();
 
-
 //app.UseAuthentication();
 //app.UseAuthorization();
-
 
 app.UseEndpoints(endpoints =>
 {

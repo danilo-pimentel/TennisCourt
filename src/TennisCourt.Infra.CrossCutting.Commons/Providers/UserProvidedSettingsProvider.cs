@@ -1,5 +1,4 @@
-﻿
-namespace TennisCourt.Infra.CrossCutting.Commons.Providers
+﻿namespace TennisCourt.Infra.CrossCutting.Commons.Providers
 {
     public class UserProvidedSettingsProvider
     {
