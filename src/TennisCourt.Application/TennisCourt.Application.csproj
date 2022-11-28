@@ -22,8 +22,4 @@
     <ProjectReference Include="..\TennisCourt.Infra.CrossCutting.Commons\TennisCourt.Infra.CrossCutting.Commons.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTO\" />
-  </ItemGroup>
-
 </Project>

@@ -8,6 +8,7 @@ namespace TennisCourt.Domain.Enums
 {
     public enum ReservationStatusEnum
     {
-        READY_TO_PLAY
+        READY_TO_PLAY,
+        CANCELED
     }
 }

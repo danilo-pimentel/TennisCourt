@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TennisCourt.Domain.Models;
 using TennisCourt.Infra.Data.Context.Configurations.Base;
 
@@ -16,6 +17,12 @@ namespace TennisCourt.Infra.Data.Context.Configurations
             builder.Property(x => x.ReservationStatus);
 
             builder.Property(x => x.Value);
+
+            builder.Property(x => x.Date);
+
+            builder.Property(x => x.Name);
+
+            builder.Property(x => x.Phone);
         }
     }
 }

@@ -8,8 +8,15 @@ namespace TennisCourt.Infra.Data.Context.Configurations.Base
     {
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {
+            this.Configure(builder, "");
+        }
+        public virtual void Configure(EntityTypeBuilder<TEntity> builder, string TableName)
+        {
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).IsRequired().ValueGeneratedOnAdd();
+            
+            builder.Property(x => x.Id)
+                .IsRequired()
+                .ValueGeneratedOnAdd();
         }
     }
 }

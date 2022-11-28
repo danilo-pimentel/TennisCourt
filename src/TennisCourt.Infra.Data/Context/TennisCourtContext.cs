@@ -8,6 +8,9 @@ namespace TennisCourt.Infra.Data.Context
     {
         private readonly UserProvidedSettingsProvider _userProvided;
 
+        public TennisCourtContext()
+        {
+        }
         public TennisCourtContext(DbContextOptions<TennisCourtContext> options,
                                    IOptions<UserProvidedSettingsProvider> userProvided)
            : base(options)
@@ -33,6 +36,11 @@ namespace TennisCourt.Infra.Data.Context
             }
 
             base.OnConfiguring(optionsBuilder);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.BuildModels();
         }
 
     }

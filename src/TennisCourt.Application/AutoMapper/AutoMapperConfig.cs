@@ -28,7 +28,8 @@ namespace TennisCourt.Application.AutoMapper
                     }
                 );
 
-                cfg.AddProfile(new DtoToDtoMappingProfile());
+                cfg.AddProfile(new DtoToDomainMappingProfile());
+                cfg.AddProfile(new ObjectToDtoMappingProfile());
             });
         }
 

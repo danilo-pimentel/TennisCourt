@@ -12,5 +12,20 @@ namespace TennisCourt.Infra.Data.Repositories
             : base(context)
         {
         }
+
+        public async Task<Reservation> GetAvailableScheduleAsync(DateTime date)
+        {
+            return this.GetAllQuery.FirstOrDefault(r => r.ReservationStatus != Domain.Enums.ReservationStatusEnum.CANCELED &&
+                                                        ((date >= r.Date && date < r.Date.AddHours(1)) ||
+                                                        (date > r.Date.AddHours(-1) && date <= r.Date)));
+        }
+
+        public async Task<Reservation> GetAvailableScheduleDifferFromAsync(DateTime date, Guid id)
+        {
+            return this.GetAllQuery.FirstOrDefault(r => r.Id != id &&
+                                                        r.ReservationStatus != Domain.Enums.ReservationStatusEnum.CANCELED &&
+                                                        ((date >= r.Date && date < r.Date.AddHours(1)) ||
+                                                        (date > r.Date.AddHours(-1) && date <= r.Date)));
+        }
     }
 }

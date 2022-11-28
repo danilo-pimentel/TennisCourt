@@ -75,6 +75,13 @@ namespace TennisCourt.Infra.Data.Repositories.Base
             return await DbSet.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<TEntity> Update(TEntity entity)
+        {
+            DbSet.Update(entity);
+            await Db.SaveChangesAsync();
+            return entity;
+        }
+
         public void Dispose()
         {
             Db.Dispose();

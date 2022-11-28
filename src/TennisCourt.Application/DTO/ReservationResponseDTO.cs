@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using TennisCourt.Domain.Enums;
-using TennisCourt.Domain.Models.Base;
 
-namespace TennisCourt.Domain.Models
+namespace TennisCourt.Application.DTO
 {
-    public class Reservation : BaseEntity
+    public class ReservationResponseDTO
     {
-        public decimal Value { get;set; }
-        public ReservationStatusEnum ReservationStatus { get; set; }
+        public Guid Id { get; set; }
+        public decimal Value { get; set; }
+        public string ReservationStatus { get; set; }
         public decimal RefundValue { get; set; }
         public DateTime Date { get; set; }
-        
-        [StringLength(100)]
         public string Name { get; set; }
-        
-        [StringLength(30)]
         public string Phone { get; set; }
+
     }
 }

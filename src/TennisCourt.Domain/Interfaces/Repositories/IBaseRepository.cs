@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace TennisCourt.Domain.Interfaces.Repositories
 {
     public interface IBaseRepository<TEntity> where TEntity : class
@@ -11,5 +13,6 @@ namespace TennisCourt.Domain.Interfaces.Repositories
         IQueryable<TEntity> GetAllQueryTracking { get; }
         bool Exists(Guid id);
         Task<bool> ExistsAsync(Guid id);
+        Task<TEntity> Update(TEntity entity);
     }
 }
